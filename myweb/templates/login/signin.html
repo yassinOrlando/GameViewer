@@ -1,0 +1,35 @@
+{% extends "layout/base.html" %}
+
+{% block pagetitle %}
+{{super()}} Sign in
+{% endblock %}
+
+
+{% block title %} Sign in {% endblock %}
+
+
+{% block content %}
+<div class="half-600">
+    <article class="card">
+        <head>
+            <div class="half" style="margin: 0 auto;">
+                <!-- this div just for demo display -->
+                Add image
+                <label class="dropimage ">
+                    <input  stitle="Drop image or click me" type="file">
+                </label>
+            </div>
+        </head>
+        <footer>
+            <form action="">
+                <fieldset class="flex one">
+                    <label><input type="text" placeholder="Username"></label>
+                    <label><input type="email" placeholder="Email"></label>
+                    <label><input type="password" placeholder="Password"></label>
+                </fieldset>
+                <button>Log in</button>
+            </form>
+        </footer>
+    </article>
+</div>
+{% endblock %}

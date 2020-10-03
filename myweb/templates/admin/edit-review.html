@@ -1,0 +1,49 @@
+{% extends "layout/base.html" %}
+
+{% block pagetitle %}
+{{super()}} Edit post
+{% endblock %}
+
+
+{% block title %} Edit post: #{{ id }} {% endblock %}
+
+
+{% block content %}
+<div class="half-600">
+    <article class="card">
+
+        <head>
+            <div class="half" style="margin: 0 auto;">
+                <!-- this div just for demo display -->
+                Change image
+                <label class="dropimage ">
+                    <input stitle="Drop image or click me" type="file">
+                </label>
+            </div>
+        </head>
+        <footer>
+            <form action="">
+                <label><input type="text" placeholder="{{ id }}" value="{{ id }}" hidden></label>
+                <fieldset class="flex one">
+                    <label><input type="text" placeholder="Title"></label>
+                </fieldset>
+
+                <div>
+                    <select>
+                        <option>Select a category</option>
+                        <option>Good option</option>
+                        <option>Nice option</option>
+                        <option>Cheap option</option>
+                    </select>
+                </div>
+                <br>
+
+                <textarea style="max-width: 100%;" placeholder="Textarea"></textarea>
+
+                <button class='success'>Save</button>
+                <a href="{{ url_for('myPosts') }}" class="button error">Exit</a>
+            </form>
+        </footer>
+    </article>
+</div>
+{% endblock %}

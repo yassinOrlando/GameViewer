@@ -1,0 +1,24 @@
+<div class="third-600">
+    <form action="">
+        <fieldset class="flex one">
+            <label><input type="text" placeholder="Search" /></label>
+        </fieldset>
+    </form>
+
+    <article class="card">
+        <header>
+            <h3>Categories</h3>
+        </header>
+        <footer>
+            <ul>
+                <li><a href="{{ url_for('category', cat_name = 'fps') }}"> FPS </a></li>
+                <li><a href="{{ url_for('category', cat_name = 'rpg') }}"> RPG </a></li>
+                <li><a href="{{ url_for('category', cat_name = 'online') }}"> Online </a></li>
+                <li><a href="{{ url_for('category', cat_name = 'simulator') }}"> Simulator </a></li>
+                <li><a href="{{ url_for('category', cat_name = 'horror') }}"> Horror </a></li>
+                <li><a href="{{ url_for('category', cat_name = 'mmo') }}"> MMO </a></li>
+                <li><a href="{{ url_for('category', cat_name = 'musical') }}"> Musical </a></li>
+            </ul>
+        </footer>
+    </article>
+</div>

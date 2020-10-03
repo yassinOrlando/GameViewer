@@ -1,0 +1,50 @@
+{% extends "layout/base.html" %}
+
+{% block pagetitle %}
+{{super()}} Administration
+{% endblock %}
+
+
+{% block title %} Administration {% endblock %}
+
+
+{% block content %}
+{% include "admin/layout/admin-options.html" %}
+<div class="two-third-600">
+    <article class="card">
+        <header>
+            <h3> Your reviews </h3>
+        </header>
+        <footer>
+            <a href="{{ url_for('newReview') }}" class="button success">New review</a>
+            <table class="primary" style="overflow-x: scroll !important; width: 100%;">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] %}
+                    <tr>
+                        <td>{{ i }}</td>
+                        <td><a href="{{ url_for('review', review_title = 'Halo Infinity review') }}">Halo Infinity review {{ i }}</a></td>
+                        <td>Horror</td>
+                        <td>03/05/2020</td>
+                        <td>
+                            <a href="{{ url_for('editReview', id = i ) }}" class="button warning">Edit</a>
+                            <button class='error'>Delete</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <p>Paginación</p>
+        </footer>
+    </article>
+</div>
+
+{% endblock %}

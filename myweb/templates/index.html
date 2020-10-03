@@ -1,0 +1,34 @@
+{% extends "layout/base.html" %}
+
+
+{% block pagetitle %}
+{{super()}} Inicio
+{% endblock %}
+
+
+{% block title %} GameViewer new reviews {% endblock %}
+
+
+{% block content %}
+
+<div class="two-third-600">
+    {% for i in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] %}
+    <article class="card">
+        <header>
+            <h3>Game title {{ i }} </h3><br>
+            <h4>Author</h4>
+            <h4>Category</h4>
+            <h4>Date</h4>
+        </header>
+        <footer>
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam vitae mollis leo. Ut molestie sapien vel efficitur egestas. Suspendisse tristique sodales augue, ut volutpat augue sodales quis. Sed at lobortis ante. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; In varius luctus cursus. Cras tempus tortor non eleifend cursus. Sed quis porttitor nibh. Vivamus tincidunt turpis sit amet orci molestie, ac gravida sapien malesuada. Aliquam eu velit id augue aliquam feugiat. Aenean scelerisque nunc porta ex blandit accumsan.
+            </p>
+        </footer>
+    </article>
+    {% endfor %}
+    <p>Paginación</p>
+</div>
+{% include "layout/categories-card.html" %}
+
+{% endblock %}
