@@ -1,11 +1,24 @@
 var dark = document.querySelector("nav input[name='dark-mode']")
+var html = document.querySelector('html')
+
 dark.addEventListener( 'change', function() {
-    let html = document.querySelector('html')
     if(this.checked) {
         html.className = "html-dark"
+        sessionStorage['mode'] = true
     } else {
         html.className = "html"
+        sessionStorage.removeItem('mode')
     }
 });
 
-console.log(dark)
+window.onload = function() {
+    if( typeof sessionStorage['mode'] !== 'undefined'){
+        html.className = "html-dark"
+        dark.checked = true
+    } else {
+        html.className = "html"
+        dark.checked = false
+    }
+};
+
+
