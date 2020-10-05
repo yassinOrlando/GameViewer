@@ -11,13 +11,9 @@
         </header>
         <footer>
             <ul>
-                <li><a href="{{ url_for('category', cat_name = 'fps') }}"> FPS </a></li>
-                <li><a href="{{ url_for('category', cat_name = 'rpg') }}"> RPG </a></li>
-                <li><a href="{{ url_for('category', cat_name = 'online') }}"> Online </a></li>
-                <li><a href="{{ url_for('category', cat_name = 'simulator') }}"> Simulator </a></li>
-                <li><a href="{{ url_for('category', cat_name = 'horror') }}"> Horror </a></li>
-                <li><a href="{{ url_for('category', cat_name = 'mmo') }}"> MMO </a></li>
-                <li><a href="{{ url_for('category', cat_name = 'musical') }}"> Musical </a></li>
+                {% for cat in cats %}
+                <li><a href="{{ url_for('category', cat_name = cat.name) }}"> {{ cat.name }} </a></li>
+                {% endfor %}
             </ul>
         </footer>
     </article>
