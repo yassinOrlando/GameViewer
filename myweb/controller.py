@@ -5,6 +5,7 @@ from flask import render_template, redirect, request, url_for
 from forms import *
 from werkzeug.utils import secure_filename
 from flask_wtf import FlaskForm
+from werkzeug.security import generate_password_hash, check_password_hash
 
 #Routes for root pages
 @app.route("/")
@@ -51,7 +52,7 @@ def addUser():
             f.save(os.path.join(
                 app.config['UPLOAD_FOLDER'], filename
             ))
-            user = Users(req['nickname'], req['email'], req['password'], filename)
+            user = Users(req['nickname'], req['email'], generate_password_hash(req['password']), filename)
         
         db.session.add(user)
         db.session.commit()
