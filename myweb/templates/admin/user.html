@@ -18,7 +18,7 @@
         <footer>
             <article class="card third-600" style="margin: 0 auto;">
                 <footer>
-                    <img style="width: 100%; border-radius: 100%;"
+                    <img style="width: 100%;"
                         src="https://cdn3.f-cdn.com/contestentries/1376995/30494909/5b566bc71d308_thumb900.jpg"
                         alt="user photo">
                     <ul>
@@ -30,5 +30,16 @@
         </footer>
     </article>
 </div>
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+    {% for message in messages %}
+    <article class="card">
+        <header>
+            <h3>{{ message }}</h3>
+        </header>
+    </article>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
 
 {% endblock %}

@@ -24,10 +24,21 @@
                     <label> {{ form.nickname }} </label>
                     <label> {{ form.email }} </label>
                     <label> {{ form.password }} </label>
-                  </fieldset>
-                  {{ form.submit }}
+                </fieldset>
+                {{ form.submit }}
             </form>
         </footer>
     </article>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+        <article class="card">
+            <header>
+                <h3>{{ message }}</h3>
+            </header>
+        </article>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
 </div>
 {% endblock %}

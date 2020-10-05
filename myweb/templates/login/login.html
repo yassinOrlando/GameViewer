@@ -12,14 +12,26 @@
 <div class="half-600">
     <article class="card">
         <footer>
-            <form action="">
+            <form action="/user-log" method="POST">
+                {{ form.csrf_token }}
                 <fieldset class="flex one">
-                    <label><input type="email" placeholder="Email"></label>
-                    <label><input type="password" placeholder="Password"></label>
-                  </fieldset>
-                <button>Log in</button>
+                    <label> {{ form.email }} </label>
+                    <label> {{ form.password }} </label>
+                </fieldset>
+                {{ form.submit }}
             </form>
         </footer>
     </article>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    {% for message in messages %}
+    <article class="card">
+        <header>
+            <h3>{{ message }}</h3>
+        </header>
+    </article>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
 </div>
 {% endblock %}

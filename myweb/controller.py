@@ -1,11 +1,12 @@
 from main import app
 import os
 from models import *
-from flask import render_template, redirect, request, url_for
+from flask import render_template, redirect, request, url_for, flash, session, g
 from forms import *
 from werkzeug.utils import secure_filename
 from flask_wtf import FlaskForm
 from werkzeug.security import generate_password_hash, check_password_hash
+from sqlalchemy import exc
 
 #Routes for root pages
 @app.route("/")
@@ -31,8 +32,24 @@ def review(review_title):
 #Routes for login
 @app.route("/login")
 def login():
-    
-    return render_template("login/login.html")
+    form = logInForm()
+    return render_template("login/login.html", form = form)
+
+@app.route("/user-log", methods=['GET', 'POST'])
+def logUser():
+    form = logInForm()
+    if request.method == "POST":
+        req = request.form
+        session['user'] = request.form['email']
+        flash('You are logged in!')
+        return redirect(url_for('admin'))
+
+    return render_template("login/login.html", form = form)
+
+@app.route("/logout")
+def logout():
+    session.pop('user', None)
+    return redirect(url_for('login'))
 
 @app.route("/signin")
 def signIn():
@@ -54,9 +71,15 @@ def addUser():
             ))
             user = Users(req['nickname'], req['email'], generate_password_hash(req['password']), filename)
         
-        db.session.add(user)
-        db.session.commit()
+        try:
+            db.session.add(user)
+            db.session.commit()
+        except exc.IntegrityError:
+            db.session.rollback()
+            flash('This email is already used')
+            return render_template("login/signin.html", form = form)
 
+        flash('Account created successfully! Now log in')
         return redirect(url_for("login"))
     return render_template("login/signin.html", form = form)
 

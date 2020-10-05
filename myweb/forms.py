@@ -9,3 +9,8 @@ class signInForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()], render_kw={"placeholder": "Password"})
     img = FileField('Profile image', validators=[Required()] )
     submit = SubmitField('Sign up')
+
+class logInForm(FlaskForm):
+    email = EmailField('Email', validators=[DataRequired(), Email()], render_kw={"placeholder": "Email"})
+    password = PasswordField('Password', validators=[DataRequired()], render_kw={"placeholder": "Password"})
+    submit = SubmitField('Log in')
