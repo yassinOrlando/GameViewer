@@ -16,7 +16,7 @@
             <h3> Your reviews </h3>
         </header>
         <footer>
-            <a href="{{ url_for('newReview') }}" class="button success">New review</a>
+            <a href="{{ url_for('newReview', user_id = user.id) }}" class="button success">New review</a>
             <div style="overflow: scroll;">
 
 
@@ -50,6 +50,17 @@
             <p>Paginación</p>
         </footer>
     </article>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    {% for message in messages %}
+    <article class="card">
+        <header>
+            <h3>{{ message }}</h3>
+        </header>
+    </article>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
 </div>
 
 {% endblock %}

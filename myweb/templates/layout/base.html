@@ -1,64 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head style="overflow: hidden; height: 250px">
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="shortcut icon"
-      type="image/png"
-      href="{{ url_for('static', filename = 'img/gv.ico') }}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename = 'css/style.css') }}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename = 'css/picnic.css') }}"
-    />
-    
-    <title>{% block pagetitle %} My web -{% endblock %}</title>
-  </head>
-  <body>
-    <div style="overflow: hidden; height: 50px">
-      <nav class="demo" id="nav">
-        <a href="{{ url_for('index') }}" class="brand">
-          <img
-            class="logo"
-            src="{{ url_for('static', filename = '/img/gv.svg') }}"
-          />
-          <span>GameViewer</span>
-        </a>
 
-        <!-- responsive-->
-        <input id="bmenub" type="checkbox" class="show" />
-        <label for="bmenub" class="burger pseudo button">menu</label>
+<head style="overflow: hidden; height: 250px">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="shortcut icon" type="image/png" href="{{ url_for('static', filename = 'img/gv.ico') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename = 'css/style.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename = 'css/picnic.css') }}" />
 
-        <div class="menu">
-          <input id="dark-mode" type="checkbox" name="dark-mode" />
-          <label for="dark-mode" class="checkable">Dark mode</label>
+  <title>{% block pagetitle %} My web -{% endblock %}</title>
+</head>
 
-          <a href="{{ url_for('index') }}" class="pseudo button success">Newest posts</a>
-          <a href="{{ url_for('login') }}" class="pseudo button">Login</a>
-          <a href="{{ url_for('signIn') }}" class="button">Sign in</a>
-          <a href="{{ url_for('admin') }}" class="pseudo button">My panel</a>
-          <a href="{{ url_for('logout') }}" class="button">Log out</a>
-        </div>
-      </nav>
-    </div>
+<body>
+  <div style="overflow: hidden; height: 50px">
+    <nav class="demo" id="nav">
+      <a href="{{ url_for('index') }}" class="brand">
+        <img class="logo" src="{{ url_for('static', filename = '/img/gv.svg') }}" />
+        <span>GameViewer</span>
+      </a>
 
-    <main>
-      <h1 style="text-align: center">{% block title %}{% endblock %}</h1>
-      <section class="main-content">
-        <div class="flex center one two-600">
+      <!-- responsive-->
+      <input id="bmenub" type="checkbox" class="show" />
+      <label for="bmenub" class="burger pseudo button">menu</label>
+
+      <div class="menu">
+        <input id="dark-mode" type="checkbox" name="dark-mode" />
+        <label for="dark-mode" class="checkable">Dark mode</label>
+
+        <a href="{{ url_for('index') }}" class="pseudo button success">Newest posts</a>
+        {% if session['user'] %}
+        <a href="{{ url_for('admin', id = user.id) }}" class="button">My panel</a>
+        <a href="{{ url_for('logout') }}" class="button warning">Log out</a>
+        {% else %}
+        <a href="{{ url_for('login') }}" class="pseudo button">Login</a>
+        <a href="{{ url_for('signIn') }}" class="button">Sign in</a>
+        {% endif %}
+
+
+      </div>
+    </nav>
+  </div>
+
+  <main>
+    <h1 style="text-align: center">{% block title %}{% endblock %}</h1>
+    <section class="main-content">
+      <div class="flex center one two-600">
         {% block content %}
         <!-- Aquí va el contenido -->
         {% endblock %}
-        </div>
-      </section>
-    </main>
+      </div>
+    </section>
+  </main>
 
-    {% include "layout/footer.html" %}
-    <script src="{{ url_for('static', filename = 'js/actions.js') }}"></script>
-  </body>
+  {% include "layout/footer.html" %}
+  <script src="{{ url_for('static', filename = 'js/actions.js') }}"></script>
+</body>
+
 </html>

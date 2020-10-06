@@ -19,11 +19,11 @@
             <article class="card third-600" style="margin: 0 auto;">
                 <footer>
                     <img style="width: 100%;"
-                        src="https://cdn3.f-cdn.com/contestentries/1376995/30494909/5b566bc71d308_thumb900.jpg"
+                        src="{{ user.img }}"
                         alt="user photo">
                     <ul>
-                        <li>Username: </li>
-                        <li>Email</li>
+                        <li>Username: {{ user.nickname }}</li>
+                        <li>Email: {{ user.email }}</li>
                     </ul>
                 </footer>
             </article>

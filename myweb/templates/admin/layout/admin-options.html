@@ -2,8 +2,8 @@
     <article class="card">
         <header>
             <ul>
-                <li><a href="{{ url_for('admin') }}" class="pseudo button">User</a></li>
-                <li><a href="{{ url_for('myPosts') }}" class="pseudo button">Reviews</a></li>
+                <li><a href="{{ url_for('admin', id = user.id) }}" class="pseudo button">User</a></li>
+                <li><a href="{{ url_for('myPosts', id = user.id) }}" class="pseudo button">Reviews</a></li>
             </ul>
         </header>
     </article>

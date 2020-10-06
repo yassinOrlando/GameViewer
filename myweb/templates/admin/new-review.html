@@ -11,36 +11,31 @@
 {% block content %}
 <div class="half-600">
     <article class="card">
-
-        <head>
-            <div class="half" style="margin: 0 auto;">
-                <!-- this div just for demo display -->
-                Add image
-                <label class="dropimage ">
-                    <input stitle="Drop image or click me" type="file">
-                </label>
-            </div>
-        </head>
         <footer>
-            <form action="">
+            <form action="/post-review" method="POST" enctype="multipart/form-data">
+                {{ form.csrf_token }}
+                <div class="half" style="margin: 0 auto;">
+                    <!-- this div just for demo display -->
+                    Add image
+                    <label class="dropimage ">
+                        {{ form.img }}
+                    </label>
+                </div>
                 <fieldset class="flex one">
-                    <label><input type="text" placeholder="Title"></label>
+                    <label> <input id="id_user" name="id_user" required type="hidden" value="{{ user.id }}"> </label>
+                    
+                    <label>{{ form.title }}</label>
                 </fieldset>
 
                 <div>
-                    <select>
-                        <option>Select a category</option>
-                        <option>Good option</option>
-                        <option>Nice option</option>
-                        <option>Cheap option</option>
-                    </select>
+                    {{ form.category }}
                 </div>
                 <br>
+                
+                {{ form.content }}
 
-                <textarea style="max-width: 100%;" placeholder="Textarea"></textarea>
-
-                <button class='success'>Save</button>
-                <a href="{{ url_for('myPosts') }}" class="button error">Exit</a>
+                {{ form.submit }}
+                <a href="{{ url_for('myPosts', id = user.id) }}" class="button error">Exit</a>
             </form>
         </footer>
     </article>
