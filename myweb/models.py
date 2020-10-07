@@ -29,10 +29,12 @@ class Reviews(db.Model):
     title = db.Column(db.Text(50))
     img = db.Column(db.Text(50))
     content = db.Column(db.Text(50))
+    created_at = db.Column(db.Text(50))
 
-    def __init__(self, id_user, id_cat, title, img, content):
+    def __init__(self, id_user, id_cat, title, img, content, created_at):
         self.id_user = id_user
         self.id_cat = id_cat
         self.title = title
         self.img = img
         self.content = content
+        self.created_at = created_at

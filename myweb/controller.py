@@ -8,25 +8,44 @@ from flask_wtf import FlaskForm
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy import exc
 from json import JSONEncoder
+from datetime import datetime
 
 #Routes for root pages
 @app.route("/")
 def index():
     categ = Categories.query.all()
-    user = Users.query.filter_by(id = session['user']).first()
+    if session.get('user') != None :
+        user = Users.query.filter_by(id = session['user']).first()
+    else:
+        user = {"id": "0"}
     name_page = "Home"
-    return render_template("index.html", page = name_page, cats = categ, user = user)
+    reviews = Reviews.query.all()
+
+    return render_template("index.html", page = name_page, cats = categ, user = user, reviews = reviews)
 
 @app.route("/category/<cat_name>")
 def category(cat_name):
+    if session.get('user') != None :
+        user = Users.query.filter_by(id = session['user']).first()
+    else:
+        user = {"id": "0"}
+
+    get_cat = Categories.query.filter_by(name = cat_name ).first()
+    reviews = Reviews.query.filter_by(id_cat = get_cat.id )
     categ = Categories.query.all()
     category = cat_name 
-    return render_template("category.html", categ_name = category, cats = categ)
+    return render_template("category.html", categ_name = category, cats = categ, user = user, reviews = reviews)
 
-@app.route("/review/<review_title>")
-def review(review_title):
-    title = review_title
-    return render_template("read-review.html", title = title)
+@app.route("/review/<review_title>/<id>")
+def review(review_title, id):
+    review = Reviews.query.filter_by(id = id).first()
+    categ = Categories.query.all()
+    if session.get('user') != None :
+        user = Users.query.filter_by(id = session['user']).first()
+    else:
+        user = {"id": "0"}
+
+    return render_template("read-review.html", cats = categ, review = review, user = user)
 
 
 #----------------------------------------------------------------------
@@ -108,7 +127,8 @@ def admin(id):
 @app.route("/admin/my-posts/<id>")
 def myPosts(id): 
     user = Users.query.filter_by(id = id).first()
-    return render_template("admin/my-posts.html", user = user)
+    reviews = Reviews.query.filter_by(id_user = user.id)
+    return render_template("admin/my-posts.html", user = user, reviews = reviews)
 
 @app.route("/admin/new-review/<user_id>")
 def newReview(user_id):
@@ -143,7 +163,7 @@ def postReview():
         f.save(os.path.join(
             app.config['UPLOAD_FOLDER'], filename
         ))
-        review = Reviews(request.form.get('id_user'), request.form.get('category'), req['title'], 'static/img/'+filename, req['content'])
+        review = Reviews(request.form.get('id_user'), request.form.get('category'), req['title'], 'static/img/'+filename, req['content'], datetime.today().strftime('%Y-%m-%d'))
 
         db.session.add(review)
         db.session.commit()
@@ -152,6 +172,14 @@ def postReview():
     else:
         flash('Fatal error')
     return redirect(url_for('myPosts', id = user.id))
+
+@app.route("/delete-review/<id>")
+def deleteReview(id):
+    review = Reviews.query.filter_by(id = id).first()
+    db.session.delete(review)
+    db.session.commit()
+    flash('Post deleted')
+    return redirect(url_for('myPosts', id = review.id_user))
 
 @app.route("/edit-review/<id>")
 def editReview(id):

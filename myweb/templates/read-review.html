@@ -6,7 +6,7 @@
 {% endblock %}
 
 
-{% block title %} {{ title }} {% endblock %}
+{% block title %} {{ review.title }} {% endblock %}
 
 
 {% block content %}
@@ -19,11 +19,12 @@
         </header>
         <header>
             <img style="width: 50px; border-radius: 100%; vertical-align: middle;" src="https://cdn3.f-cdn.com/contestentries/1376995/30494909/5b566bc71d308_thumb900.jpg" alt="author-img">
-            <h4>Author</h4>
-            <h4>Category</h4>
+            <h4>Author: {{ review.id_user }} </h4>
+            <h4>Category: {{ review.id_cat }} </h4>
             <h4>Date</h4>
         </header>
         <footer>
+            {{ review.content }}
             <p>
 
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam vitae mollis leo. Ut molestie sapien vel efficitur egestas. Suspendisse tristique sodales augue, ut volutpat augue sodales quis. Sed at lobortis ante. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; In varius luctus cursus. Cras tempus tortor non eleifend cursus. Sed quis porttitor nibh. Vivamus tincidunt turpis sit amet orci molestie, ac gravida sapien malesuada. Aliquam eu velit id augue aliquam feugiat. Aenean scelerisque nunc porta ex blandit accumsan.
