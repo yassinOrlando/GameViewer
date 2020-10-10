@@ -34,4 +34,4 @@ class createReview(FlaskForm):
     submit = SubmitField('Save', render_kw={"class": "success"})
 
 class updateImg(FlaskForm):
-    img = FileField('Review img')
+    img = FileField('Review img', validators=[Required()])

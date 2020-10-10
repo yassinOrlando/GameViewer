@@ -18,7 +18,7 @@
                     <!-- this div just for demo display -->
                     Add image
                     <label class="dropimage ">
-                        <input title="Drop image or click me" name="img" type="file" value="{{ url_for('static', filename = review.img) }}">
+                        <input title="Drop image or click me" name="img" type="file" required value="{{ url_for('static', filename = review.img) }}">
                     </label>
                     {{ review.img }}
                 </div>
