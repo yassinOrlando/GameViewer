@@ -9,7 +9,35 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy import exc
 from json import JSONEncoder
 from datetime import datetime
+from functools import wraps
 
+
+#-------------------------------------
+#middleware
+def isAuth(f):
+    @wraps(f)
+    def wrap(*args, **kwargs):        # if user is not logged in, redirect to login page
+        if session.get('user') != None:
+            pass
+        else:
+            return redirect(url_for('index'))     # finally call f. f() now haves access to g.user
+        return f(*args, **kwargs)
+   
+    return wrap
+
+def isVisitor(f):
+    @wraps(f)
+    def wrap(*args, **kwargs):        # if user is not logged in, redirect to login page      
+        if session.get('user') != None :
+            return redirect(url_for('index'))     # finally call f. f() now haves access to g.user
+        else:
+            pass
+        return f(*args, **kwargs)
+   
+    return wrap
+
+
+#-------------------------------------
 #Routes for root pages
 @app.route("/")
 def index():
@@ -52,11 +80,13 @@ def review(review_title, id):
 #Routes for login
 
 @app.route("/login")
+@isVisitor
 def login():
     form = logInForm()
     return render_template("login/login.html", form = form)
 
 @app.route("/user-log", methods=['GET', 'POST'])
+@isVisitor
 def logUser():
     form = logInForm()
     if request.method == "POST":
@@ -78,17 +108,20 @@ def logUser():
     return render_template("login/login.html", form = form)
 
 @app.route("/logout")
+@isAuth
 def logout():
     session.pop('user', None)
     flash('You logged out!')
     return redirect(url_for('login'))
 
 @app.route("/signin")
+@isVisitor
 def signIn():
     form = signInForm()
     return render_template("login/signin.html", form = form)
 
 @app.route("/add-user", methods=('GET', 'POST'))
+@isVisitor
 def addUser():
     form = signInForm()
     if request.method == "POST":
@@ -101,7 +134,7 @@ def addUser():
             f.save(os.path.join(
                 app.config['UPLOAD_FOLDER'], filename
             ))
-            user = Users(req['nickname'], req['email'], generate_password_hash(req['password']), 'static/img/'+filename)
+            user = Users(req['nickname'], req['email'], generate_password_hash(req['password']), 'img/'+filename)
         
         try:
             db.session.add(user)
@@ -120,17 +153,20 @@ def addUser():
 #Routes for the admin
 
 @app.route("/admin/<id>")
+@isAuth
 def admin(id):
     user = Users.query.filter_by(id = id).first()
     return render_template("admin/user.html", user = user)
 
 @app.route("/admin/my-posts/<id>")
+@isAuth
 def myPosts(id): 
     user = Users.query.filter_by(id = id).first()
     reviews = Reviews.query.filter_by(id_user = user.id)
     return render_template("admin/my-posts.html", user = user, reviews = reviews)
 
 @app.route("/admin/new-review/<user_id>")
+@isAuth
 def newReview(user_id):
     user =  Users.query.filter_by(id = user_id).first()
     cats = Categories.query.all()
@@ -139,31 +175,32 @@ def newReview(user_id):
 
 
 @app.route("/post-review", methods=('GET', 'POST'))
+@isAuth
 def postReview():
     user = Users.query.filter_by(id = session['user']).first()
     form = signInForm()
     if request.method == "POST":
         req = request.form
         review = set()
-        """if form.validate_on_submit():
-            f = form.img.data
-            filename = str(secure_filename(f.filename))
-            f.save(os.path.join(
-                app.config['UPLOAD_FOLDER'], filename
-            ))
-            review = Reviews(request.form.get('id_user'), request.form.get('category'), req['title'], 'static/img/'+filename, req['content'])
+        #if form.validate_on_submit():
+         #   f = form.img.data
+          #  filename = str(secure_filename(f.filename))
+            #f.save(os.path.join(
+            #    app.config['UPLOAD_FOLDER'], filename
+            #))
+            #review = Reviews(request.form.get('id_user'), request.form.get('category'), req['title'], 'static/img/'+filename, req['content'])
 
-            db.session.add(review)
-            db.session.commit()
+            #db.session.add(review)
+            #db.session.commit()
 
-            flash('Review posted')
-        else:"""
+            #flash('Review posted')
+        #else:"""
         f = form.img.data
         filename = str(secure_filename(f.filename))
         f.save(os.path.join(
             app.config['UPLOAD_FOLDER'], filename
         ))
-        review = Reviews(request.form.get('id_user'), request.form.get('category'), req['title'], 'static/img/'+filename, req['content'], datetime.today().strftime('%Y-%m-%d'))
+        review = Reviews(request.form.get('id_user'), request.form.get('category'), req['title'], 'img/'+filename, req['content'], datetime.today().strftime('%Y-%m-%d'))
 
         db.session.add(review)
         db.session.commit()
@@ -174,6 +211,7 @@ def postReview():
     return redirect(url_for('myPosts', id = user.id))
 
 @app.route("/delete-review/<id>")
+@isAuth
 def deleteReview(id):
     review = Reviews.query.filter_by(id = id).first()
     db.session.delete(review)
@@ -182,8 +220,38 @@ def deleteReview(id):
     return redirect(url_for('myPosts', id = review.id_user))
 
 @app.route("/edit-review/<id>")
+@isAuth
 def editReview(id):
-    r_id = id 
-    return render_template("admin/edit-review.html", id = r_id)
+    user = Users.query.filter_by(id = session['user']).first()
+    review = Reviews.query.filter_by(id = id).first()
+    cats = Categories.query.all()
+    return render_template("admin/edit-review.html", review = review, user = user, cats = cats)
+
+@app.route("/update-review", methods=('GET', 'POST'))
+@isAuth
+def updateReview():
+    user = Users.query.filter_by(id = session['user']).first()
+    form = updateImg()
+    if request.method == "POST":
+        f = form.img.data
+        filename = str(secure_filename(f.filename))
+        f.save(os.path.join(
+            app.config['UPLOAD_FOLDER'], filename
+        ))
+        review = Reviews.query.filter_by(id = request.form.get('id')).first()
+        review.id_cat = request.form.get('category')
+        db.session.commit()
+        review.title = request.form.get('title')
+        db.session.commit()
+        review.img = 'img/'+filename
+        review.content = request.form.get('content')
+        db.session.commit()
+
+        flash('Review updated')
+    else:
+        flash('Fatal error')
+    return redirect(url_for('myPosts', id = user.id))
+
+
 
 app.run(debug=True)

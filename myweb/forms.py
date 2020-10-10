@@ -24,9 +24,6 @@ class createReview(FlaskForm):
             options.append(tuple((cat.id, cat.name)))
 
 
-
-    #id_user = HiddenField('id_user', validators=[DataRequired()], render_kw={"value": "user"})
-    #id_user = StringField('id_user', validators=[DataRequired()])
     title = StringField('Title', validators=[DataRequired()], render_kw={"placeholder": "Title"})
     img = FileField('Review img', validators=[Required()])
     content = TextAreaField('Content', validators=[DataRequired()], render_kw={"placeholder": "Content"})
@@ -35,3 +32,6 @@ class createReview(FlaskForm):
         choices = options
     )
     submit = SubmitField('Save', render_kw={"class": "success"})
+
+class updateImg(FlaskForm):
+    img = FileField('Review img')

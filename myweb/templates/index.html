@@ -22,7 +22,7 @@
                     <h3><a href="{{ url_for('review', review_title = review.title, id = review.id) }}"> {{ review.title }} </a></h3><br>
                     <h4>Author: {{ review.id_user }} </h4>
                     <h4> Category: {{ review.id_cat }} </h4>
-                    <h4>Date</h4>
+                    <h4>{{ review.created_at }}</h4>
                 </header>
             </article>
         </div>

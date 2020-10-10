@@ -5,43 +5,46 @@
 {% endblock %}
 
 
-{% block title %} Edit post: #{{ id }} {% endblock %}
+{% block title %} Edit post: {{ review.title }} {% endblock %}
 
 
 {% block content %}
 <div class="half-600">
     <article class="card">
-
-        <head>
-            <div class="half" style="margin: 0 auto;">
-                <!-- this div just for demo display -->
-                Change image
-                <label class="dropimage ">
-                    <input stitle="Drop image or click me" type="file">
-                </label>
-            </div>
-        </head>
         <footer>
-            <form action="">
-                <label><input type="text" placeholder="{{ id }}" value="{{ id }}" hidden></label>
+            <form action="/update-review" method="POST" enctype="multipart/form-data">
+
+                <div class="half" style="margin: 0 auto;">
+                    <!-- this div just for demo display -->
+                    Add image
+                    <label class="dropimage ">
+                        <input title="Drop image or click me" name="img" type="file" value="{{ url_for('static', filename = review.img) }}">
+                    </label>
+                    {{ review.img }}
+                </div>
+                <label><input type="text" placeholder="{{ review.id }}" name="id" value="{{ review.id }}" hidden></label>
+                <label><input type="text" placeholder="{{ review.id_user }}" name="id_user" value="{{ review.id_user }}" hidden></label>
                 <fieldset class="flex one">
-                    <label><input type="text" placeholder="Title"></label>
+                    <label><input type="text" placeholder="Title" name="title"  value="{{ review.title }}"></label>
                 </fieldset>
 
                 <div>
-                    <select>
-                        <option>Select a category</option>
-                        <option>Good option</option>
-                        <option>Nice option</option>
-                        <option>Cheap option</option>
+                    <select name="category">
+                        {% for cat in cats %}
+                            {% if cat.id == review.id %}
+                            <option value="{{ cat.id }}" selected>{{ cat.name }}</option>
+                            {% else %}
+                            <option value="{{ cat.id }}" >{{ cat.name }}</option>
+                            {% endif %}
+                        {% endfor %}
                     </select>
                 </div>
                 <br>
 
-                <textarea style="max-width: 100%;" placeholder="Textarea"></textarea>
+                <textarea style="max-width: 100%;" name="content" placeholder="Textarea">{{review.content}}</textarea>
 
-                <button class='success'>Save</button>
-                <a href="{{ url_for('myPosts') }}" class="button error">Exit</a>
+                <input type="submit" class="success" value="Save">
+                <a href="{{ url_for('myPosts', id = user.id) }}" class="button error">Exit</a>
             </form>
         </footer>
     </article>
