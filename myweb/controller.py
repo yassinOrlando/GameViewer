@@ -6,7 +6,7 @@ from forms import *
 from werkzeug.utils import secure_filename
 from flask_wtf import FlaskForm
 from werkzeug.security import generate_password_hash, check_password_hash
-from sqlalchemy import exc
+from sqlalchemy import exc, desc
 from json import JSONEncoder
 from datetime import datetime
 from functools import wraps
@@ -36,6 +36,19 @@ def isVisitor(f):
    
     return wrap
 
+def userAuth(id):
+    link_id = Users.query.filter_by(id = id).first()
+    actual_user = Users.query.filter_by(id = session['user']).first()
+    print(actual_user.id)
+    print(session.get('user'))
+    if link_id.id == actual_user.id:
+        print('You passed')
+        return True
+    else:
+        print('no no no, you are not going there :)')
+        session.pop('user', None)
+        return False
+
 
 #-------------------------------------
 #Routes for root pages
@@ -46,10 +59,9 @@ def index():
         user = Users.query.filter_by(id = session['user']).first()
     else:
         user = {"id": "0"}
-    name_page = "Home"
-    reviews = Reviews.query.all()
-
-    return render_template("index.html", page = name_page, cats = categ, user = user, reviews = reviews)
+    
+    reviews = Reviews.query.order_by(desc('id'))
+    return render_template("index.html", cats = categ, user = user, reviews = reviews)
 
 @app.route("/category/<cat_name>")
 def category(cat_name):
@@ -59,7 +71,7 @@ def category(cat_name):
         user = {"id": "0"}
 
     get_cat = Categories.query.filter_by(name = cat_name ).first()
-    reviews = Reviews.query.filter_by(id_cat = get_cat.id )
+    reviews = Reviews.query.filter_by(id_cat = get_cat.id ).order_by(desc('id'))
     categ = Categories.query.all()
     category = cat_name 
     return render_template("category.html", categ_name = category, cats = categ, user = user, reviews = reviews)
@@ -67,13 +79,15 @@ def category(cat_name):
 @app.route("/review/<review_title>/<id>")
 def review(review_title, id):
     review = Reviews.query.filter_by(id = id).first()
-    categ = Categories.query.all()
+    rev_author = Users.query.filter_by(id = review.id_user).first()
+    rev_cat = Categories.query.filter_by(id = review.id_cat).first()
+    cats = Categories.query.all()
     if session.get('user') != None :
         user = Users.query.filter_by(id = session['user']).first()
     else:
         user = {"id": "0"}
 
-    return render_template("read-review.html", cats = categ, review = review, user = user)
+    return render_template("read-review.html", cats = cats, review = review, user = user, rev_author = rev_author, rev_cat = rev_cat.name)
 
 
 #----------------------------------------------------------------------
@@ -155,19 +169,26 @@ def addUser():
 @app.route("/admin/<id>")
 @isAuth
 def admin(id):
+    if userAuth(id) == False:
+        return redirect(url_for('index'))
+
     user = Users.query.filter_by(id = id).first()
     return render_template("admin/user.html", user = user)
 
 @app.route("/admin/my-posts/<id>")
 @isAuth
 def myPosts(id): 
+    if userAuth(id) == False:
+        return redirect(url_for('index'))
     user = Users.query.filter_by(id = id).first()
-    reviews = Reviews.query.filter_by(id_user = user.id)
+    reviews = Reviews.query.filter_by(id_user = user.id).order_by(desc('id'))
     return render_template("admin/my-posts.html", user = user, reviews = reviews)
 
 @app.route("/admin/new-review/<user_id>")
 @isAuth
 def newReview(user_id):
+    if userAuth(user_id) == False:
+        return redirect(url_for('index'))
     user =  Users.query.filter_by(id = user_id).first()
     cats = Categories.query.all()
     form = createReview()
@@ -224,6 +245,8 @@ def deleteReview(id):
 def editReview(id):
     user = Users.query.filter_by(id = session['user']).first()
     review = Reviews.query.filter_by(id = id).first()
+    if userAuth(review.id_user) == False:
+        return redirect(url_for('index'))
     cats = Categories.query.all()
     return render_template("admin/edit-review.html", review = review, user = user, cats = cats)
 

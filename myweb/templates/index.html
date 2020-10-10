@@ -11,24 +11,21 @@
 
 {% block content %}
 
-<div class="two-third-600">
+<div class="two-third-600" id="reviews">
     <div class="flex two-600">
         {% for review in reviews %}
         <div>
             <article class="card">
                 <img style="width: 100%; max-height: 250px;"
-                    src="{{ url_for('static', filename = 'img/travel.jpg' ) }}" alt="post img">
+                    src="{{ url_for('static', filename = review.img ) }}" alt="post img">
                 <header>
                     <h3><a href="{{ url_for('review', review_title = review.title, id = review.id) }}"> {{ review.title }} </a></h3><br>
-                    <h4>Author: {{ review.id_user }} </h4>
-                    <h4> Category: {{ review.id_cat }} </h4>
-                    <h4>{{ review.created_at }}</h4>
+                    <h5>{{ review.created_at }}</h5>
                 </header>
             </article>
         </div>
         {% endfor %}
     </div>
-    <p>Paginación</p>
 </div>
 {% include "layout/categories-card.html" %}
 

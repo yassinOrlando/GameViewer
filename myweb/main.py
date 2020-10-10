@@ -7,7 +7,6 @@ import os
 app = Flask(__name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = os.urandom(24)
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database/database.db'
 #app.config['PERMANENT_SESSION_LIFETIME'] =  timedelta(minutes=30)
 
