@@ -1,4 +1,4 @@
-from main import app
+from myweb.main import app
 import os
 from myweb.models import *
 from flask import render_template, redirect, request, url_for, jsonify, flash, session, g, make_response
