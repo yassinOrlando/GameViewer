@@ -9,6 +9,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = os.urandom(24)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database/database.db'
 #app.config['PERMANENT_SESSION_LIFETIME'] =  timedelta(minutes=30)
+port = int(os.environ.get('PORT', 5000))
 
 
 app.config['UPLOAD_FOLDER'] = './static/img'
@@ -16,7 +17,8 @@ ALLOWED_EXTENSIONS = set(['pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
 db = SQLAlchemy(app)
 
+
 from controller import *
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0', port=port)
