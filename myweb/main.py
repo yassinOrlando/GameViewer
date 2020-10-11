@@ -17,7 +17,7 @@ ALLOWED_EXTENSIONS = set(['pdf', 'png', 'jpg', 'jpeg', 'gif'])
 db = SQLAlchemy(app)
 
 
-from controller import *
+from myweb.controller import *
 
 if __name__ == '__main__':
     app.run()
