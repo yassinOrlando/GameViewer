@@ -13,6 +13,7 @@ Jinja2==2.11.2
 lazy-object-proxy==1.4.3
 MarkupSafe==1.1.1
 mccabe==0.6.1
+ordereddict==1.1
 pylint==2.6.0
 pylint-flask==0.6
 pylint-plugin-utils==0.6
