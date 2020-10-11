@@ -16,6 +16,7 @@ ALLOWED_EXTENSIONS = set(['pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
 db = SQLAlchemy(app)
 
+
 from controller import *
 
 if __name__ == '__main__':
