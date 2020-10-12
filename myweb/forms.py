@@ -3,7 +3,7 @@ from flask import session
 from wtforms import StringField, PasswordField, SubmitField, FileField, TextAreaField, SelectField, HiddenField
 from wtforms.validators import DataRequired, Email, Required
 from wtforms.fields.html5 import EmailField
-from myweb.models import Categories, Users
+from models import Categories, Users
 
 class signInForm(FlaskForm):
     nickname = StringField('Nickname', validators=[DataRequired()], render_kw={"placeholder": "Nickname"})
