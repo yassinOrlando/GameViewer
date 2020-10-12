@@ -1,1 +1,6 @@
-web: gunicorn -w 4 -b 0.0.0.0:$PORT -k gevent myweb.main:app
+web: gunicorn myweb.main:app --log-file=-
+heroku buildpacks:clear
+heroku buildpacks:add --index heroku/python
+heroku ps:scale web=1
+heroku config:set FLASK_APP=myweb
+heroku ps
