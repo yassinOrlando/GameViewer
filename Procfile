@@ -1,1 +1,1 @@
-web: python myweb.main.py $PORT
+web: python myweb/main.py $PORT
