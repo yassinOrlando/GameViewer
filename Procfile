@@ -1,1 +1,1 @@
-web: gunicorn myweb.main:app --preload --workers 1
+worker: python myweb/main.py --log-file -
