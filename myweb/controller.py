@@ -1,8 +1,8 @@
-from main import app
+from myweb.main import app
 import os
-from models import *
+from myweb.models import *
 from flask import render_template, redirect, request, url_for, jsonify, flash, session, g, make_response
-from forms import *
+from myweb.forms import *
 from werkzeug.utils import secure_filename
 from flask_wtf import FlaskForm
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -277,4 +277,4 @@ def updateReview():
 
 
 
-app.run(debug=True)
+#app.run(debug=True)
