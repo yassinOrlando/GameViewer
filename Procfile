@@ -1,1 +1,1 @@
-web: gunicorn myweb.main:app --log-file=-
+web: python run_server.py $PORT
