@@ -1,8 +1,8 @@
-from myweb.main import app
+from main import app
 import os
-from myweb.models import *
+from models import *
 from flask import render_template, redirect, request, url_for, jsonify, flash, session, g, make_response
-from myweb.forms import *
+from forms import *
 from werkzeug.utils import secure_filename
 from flask_wtf import FlaskForm
 from werkzeug.security import generate_password_hash, check_password_hash
